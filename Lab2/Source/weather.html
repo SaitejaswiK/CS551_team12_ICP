@@ -13,10 +13,13 @@
 </head>
 <body>
 <div ng-app="weather" ng-controller="weatherctrl">
+    <input type = "text" ng-model = "a.state_c" model = "state">
+    <input type = "text" ng-model = "a.city_n" model = "city">
     <button id="btn" ng-click="getWeather()"> Show Weather </button>
     <br/>
     <br/>
     <div class="weatherModule" >
+        The weather report at {{a.city_n}}:
         <div ng-repeat = "x in items | limitTo:5">
             At {{x.FCTTIME.civil}} temperature is {{x.temp.english}} F
 
@@ -29,7 +32,7 @@
         .controller('weatherctrl', function($scope, $http) {
 
             $scope.getWeather = function() {
-                $http.get('https://api.wunderground.com/api/36b799dc821d5836/hourly/q/MO/Kansas%20City.json').success(function(data) {
+                $http.get('https://api.wunderground.com/api/36b799dc821d5836/hourly/q/'+$scope.a.state_c+'/'+$scope.a.city_n+'.json').success(function(data) {
                     console.log(data.hourly_forecast);
                     $scope.items = data.hourly_forecast;
 
