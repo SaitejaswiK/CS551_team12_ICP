@@ -1,0 +1,42 @@
+<html>
+<head>
+    <style>
+        .weatherModule {
+            background: #e6eeff;
+            height: 150px;
+            width: 250px;
+            border: 1px dashed #ccc;
+            padding: 1em;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js" type="application/javascript"></script>
+</head>
+<body>
+<div ng-app="weather" ng-controller="weatherctrl">
+    <button id="btn" ng-click="getWeather()"> Show Weather </button>
+    <br/>
+    <br/>
+    <div class="weatherModule" >
+        <div ng-repeat = "x in items | limitTo:5">
+            At {{x.FCTTIME.civil}} temperature is {{x.temp.english}} F
+
+        </div>
+    </div>
+</div>
+
+<script>
+    angular.module('weather', [])
+        .controller('weatherctrl', function($scope, $http) {
+
+            $scope.getWeather = function() {
+                $http.get('https://api.wunderground.com/api/36b799dc821d5836/hourly/q/MO/Kansas%20City.json').success(function(data) {
+                    console.log(data.hourly_forecast);
+                    $scope.items = data.hourly_forecast;
+
+                })
+            }
+
+        });
+</script>
+</body>
+</html>
