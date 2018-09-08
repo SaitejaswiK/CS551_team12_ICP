@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.1/angular.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<html>
+
+<style>
+    .caloriesModule {
+        background: #f2f2f2;
+        height: 150px;
+        width: 250px;
+        border: 1px dashed#CCCCCC ;
+        padding: 1em;
+    }
+    .food_class{
+
+    }
+    body {
+        background-image: url("https://jooinn.com/images/mixed-fruits-1.jpg");
+        background-repeat: no-repeat;
+    }
+</style>
+
+<body>
+
+
+<div ng-app="food" ng-controller="calories" class = "food_class" align = "center">
+
+        <input type="text" placeholder = "Enter the recipie" ng_model="food_item" model="food_item" >
+        <button type = "btn" id="btn" class = "btn btn-primary" ng-click="getCalories()"> Get Info  </button>
+        <br/>
+
+        <br/>
+        <div class="caloriesModule">
+            <p class="weightcalories" ng-bind-html-unsafe="Caloriesout.html"></p>
+            <div class="data" ng-bind-html-unsafe="data.html"></div>
+        </div>
+</div>
+</body>
+
+
+
+
+
+<script>
+    angular.module('food', [])
+        .controller('calories', function($scope, $http) {
+            $scope.getCalories = function() {
+                $http.get('https://api.nutritionix.com/v1_1/search/'+$scope.food_item+'?results=0:1&fields=*&appId=5bb808e9&appKey=d655fc088a2411ff7c354d965cdb388f').success(function(data) {
+                    //console.log(data.hits);
+                    calories =data.hits[0].fields.nf_calories;
+                    weight = data.hits[0].fields.nf_serving_weight_grams;
+                    console.log(calories);
+                    $scope.Caloriesout = {
+                        html: "Total Calories ="+ calories + " </br>Total Weight =" + weight
+                    }
+                    $scope.data = {
+                        html: "<a class=\"btn btn-primary\" href=\"https://stream.watsonplatform.net/text-to-speech/api/v1/synthesize?username=b44f949c-5402-4f16-8730-133ca332d157&password=cZYhb5c3Wiuj&text="+ " total calories is "+ calories +"and total weight is " + weight+"\" >click here </a>"
+                    }
+                })
+            }
+        });
+</script>
+</html>
